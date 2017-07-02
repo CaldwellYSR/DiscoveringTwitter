@@ -16,7 +16,7 @@ public class WorldGenerator : MonoBehaviour
 
 	void Start ()
     {
-        long seed = 3827138L;
+        long seed = 9483217L;
         noise = new PerlinNoise(seed);
         this.Regenerate();
 	}

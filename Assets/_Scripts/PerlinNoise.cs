@@ -20,19 +20,26 @@ public class PerlinNoise
     public int GetNoise(int x, int range)
     {
         // x == 6
-
         int frequency = 16;
-        int chunkIndex = x / frequency; // Integer math floors this
-        Debug.Log("Chunk Index: " + chunkIndex);
-        float progress = (x % frequency) / (frequency * 1f);
-        Debug.Log("Progress: " + progress);
-        float leftRandom = this.random(chunkIndex, range);
-        Debug.Log("Left Random: " + leftRandom);
-        float rightRandom = this.random(chunkIndex + 1, range);
-        Debug.Log("Right Random: " + rightRandom);
 
-        float noise = (1 - progress) * leftRandom + progress * rightRandom;
-        Debug.Log("Noise: " + noise);
+        float noise = 0;
+        range /= 2;
+        bool hitOne = false;
+
+        while (frequency > 0)
+        {
+            int chunkIndex = x / frequency;
+            float progress = (x % frequency) / (frequency * 1f);
+            float leftRandom = this.random(chunkIndex, range);
+            float rightRandom = this.random(chunkIndex + 1, range);
+
+            noise += (1 - progress) * leftRandom + progress * rightRandom;
+
+            frequency /= 2;
+            range /= 2;
+
+            range = Mathf.Max(1, range);
+        }
 
         return Mathf.RoundToInt(noise);
 
@@ -40,7 +47,6 @@ public class PerlinNoise
 
     private float random(int index, int range)
     {
-        Debug.Log("Random: " + Mathf.Pow(index + this.seed, 5f) % range);
         return (Mathf.Pow(index + this.seed, 5f) % range);
     }
 }
