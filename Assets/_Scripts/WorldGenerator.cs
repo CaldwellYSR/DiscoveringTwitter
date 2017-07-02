@@ -16,13 +16,30 @@ public class WorldGenerator : MonoBehaviour
 
 	void Start ()
     {
-        long seed = 9483217L;
+        long seed = Random.Range(1000000, 9999999);
         noise = new PerlinNoise(seed);
         this.Regenerate();
 	}
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            long seed = Random.Range(1000000, 9999999);
+            noise = new PerlinNoise(seed);
+            this.Regenerate();
+        }
+    }
+
     private void Regenerate()
     {
+
+        GameObject[] terrain = GameObject.FindGameObjectsWithTag("Terrain");
+        foreach (GameObject tmp in terrain)
+        {
+            Destroy(tmp);
+        }
+
         float width = DirtPrefab.transform.lossyScale.x;
         float height = DirtPrefab.transform.lossyScale.y;
 
@@ -32,7 +49,9 @@ public class WorldGenerator : MonoBehaviour
             for (int y = minY; y < columnHeight; y++)
             {
                 GameObject prefab = (y == columnHeight - 1) ? GrassPrefab : DirtPrefab;
-                GameObject.Instantiate(prefab, new Vector2(x * width, y * height), Quaternion.identity);
+                GameObject instance = GameObject.Instantiate(prefab, new Vector2(x * width, y * height), Quaternion.identity);
+                instance.tag = "Terrain";
+                instance.transform.parent = this.transform;
             }
         }
     }
