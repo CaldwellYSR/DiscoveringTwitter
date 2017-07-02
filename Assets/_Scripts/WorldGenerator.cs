@@ -31,7 +31,8 @@ public class WorldGenerator : MonoBehaviour
             int columnHeight = minY + noise.GetNoise(x - minX, maxY - minY);
             for (int y = minY; y < columnHeight; y++)
             {
-                GameObject.Instantiate(DirtPrefab, new Vector2(x * width, y * height), Quaternion.identity);
+                GameObject prefab = (y == columnHeight - 1) ? GrassPrefab : DirtPrefab;
+                GameObject.Instantiate(prefab, new Vector2(x * width, y * height), Quaternion.identity);
             }
         }
     }
