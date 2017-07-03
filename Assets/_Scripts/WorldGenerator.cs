@@ -16,6 +16,7 @@ public class WorldGenerator : MonoBehaviour
 
 	void Start ()
     {
+        // Generate a random seed for our noise generator
         long seed = Random.Range(1000000, 9999999);
         noise = new PerlinNoise(seed);
         this.Regenerate();
@@ -23,6 +24,7 @@ public class WorldGenerator : MonoBehaviour
 
     private void Update()
     {
+        // If the user presses space regenerate the map
         if (Input.GetKeyDown(KeyCode.Space))
         {
             long seed = Random.Range(1000000, 9999999);
@@ -34,17 +36,20 @@ public class WorldGenerator : MonoBehaviour
     private void Regenerate()
     {
 
+        // Clear the current map
         GameObject[] terrain = GameObject.FindGameObjectsWithTag("Terrain");
         foreach (GameObject tmp in terrain)
         {
             Destroy(tmp);
         }
 
+        // Set up the sprite width and heightj
         float width = DirtPrefab.transform.lossyScale.x;
         float height = DirtPrefab.transform.lossyScale.y;
 
         for (int x = minX; x < maxX; x++) 
         {
+            // Use the nosie generator to determine the height of this column
             int columnHeight = minY + noise.GetNoise(x - minX, maxY - minY);
             for (int y = minY; y < columnHeight; y++)
             {
